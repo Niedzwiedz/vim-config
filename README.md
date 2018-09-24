@@ -8,4 +8,5 @@
 - python3
 - pip3
 - fzy
+- ripgrep
 - neovim with python3 enabled (check by `:echo has("python3")`)

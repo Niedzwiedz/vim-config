@@ -56,11 +56,8 @@ call plug#begin('~/.local/share/nvim/plugged')
 " -------------------------------------------------------------------------------------------------
 " Fuzzy finder (uses fzy - brew install fzy)
 Plug 'srstevenson/vim-picker'
-"[!!!]TODO - maybe those two can be replaced by some better pattern searcher like fzy, fzf
-"[!]TODO Search pattern in project (not really using that)
+"Search pattern in project - using `ripgrep` (leader ff, leader fw)
 Plug 'eugen0329/vim-esearch'
-" Search pattern in project (silver searcher)
-Plug 'rking/ag.vim'
 " Async Lint Engine - linting etc.
 Plug 'w0rp/ale'
 " Display marks at the left side
@@ -241,6 +238,9 @@ let mapleader=" "
 " esc as jk
 imap jk <ESC>
 
+" disable highlight with double enter instead of :noh
+nnoremap <CR> :noh<CR><CR>
+
 " switching panes with leader kjhl
 nmap <silent> <leader>k :wincmd k<CR>
 nmap <silent> <leader>j :wincmd j<CR>
@@ -307,9 +307,9 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 "" Esearch
 let g:esearch = {
-  \ 'adapter':    'ag',
+  \ 'adapter':    'rg',
   \ 'backend':    'nvim',
-  \ 'out':        'win',
+  \ 'out':        'qflist',
   \ 'batch_size': 1000,
   \ 'use':        ['visual', 'hlsearch', 'last'],
   \}
@@ -346,3 +346,5 @@ autocmd! User GoyoLeave Limelight!
 "" Deoplete -completion tool- config
 let g:deoplete#enable_at_startup = 1
 
+" Vim-picker grep tool as ripgrep
+let g:picker_find_executable = 'rg'

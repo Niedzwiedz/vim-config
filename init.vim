@@ -77,6 +77,9 @@ Plug 'tpope/vim-fugitive'
 " autocomplete for quotes etc.
 Plug 'Raimondi/delimitMate'
 
+" Magit - git wrapper(like in emacs)
+Plug 'jreybert/vimagit'
+
 "" Technology specific
 
 " -------------------------------------------------------------------------------------------------

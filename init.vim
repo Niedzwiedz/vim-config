@@ -1,4 +1,42 @@
 " =================================================================================================
+"
+"                           ▄   ▄███▄   ████▄     ▄   ▄█ █▀▄▀█
+"                            █  █▀   ▀  █   █      █  ██ █ █ █
+"                        ██   █ ██▄▄    █   █ █     █ ██ █ ▄ █
+"                        █ █  █ █▄   ▄▀ ▀████  █    █ ▐█ █   █
+"                        █  █ █ ▀███▀           █  █   ▐    █
+"                        █   ██                  █▐        ▀
+"                                                ▐  CONFIG
+"
+" =================================================================================================
+"                _________________________________
+"               |:::::::::::::;;::::::::::::::::::|
+"               |:::::::::::'~||~~~``:::::::::::::|
+"               |::::::::'   .':     o`:::::::::::|
+"               |:::::::' oo | |o  o    ::::::::::|
+"               |::::::: 8  .'.'    8 o  :::::::::|
+"               |::::::: 8  | |     8    :::::::::|
+"               |::::::: _._| |_,...8    :::::::::|
+"               |::::::'~--.   .--. `.   `::::::::|
+"               |:::::'     =8     ~  \ o ::::::::|
+"               |::::'       8._ 88.   \ o::::::::|
+"               |:::'   __. ,.ooo~~.    \ o`::::::|
+"               |:::   . -. 88`78o/:     \  `:::::|
+"               |::'     /. o o \ ::      \88`::::|   "He will join us or die."
+"               |:;     o|| 8 8 |d.        `8 `:::|
+"               |:.       - ^ ^ -'           `-`::|
+"               |::.                          .:::|
+"               |:::::.....           ::'     ``::|
+"               |::::::::-'`-        88          `|
+"               |:::::-'.          -       ::     |
+"               |:-~. . .                   :     |        - Darth Vader on VSCode user
+"               | .. .   ..:   o:8      88o       |
+"               |. .     :::   8:P     d888. . .  |
+"               |.   .   :88   88      888'  . .  |
+"               |_________________________________|
+"
+
+" =================================================================================================
 """ COLORS FIX
 " -------------------------------------------------------------------------------------------------
 ""Use 25-bit (true-color) mode in Vim/Neovim when outside tmux.
@@ -65,7 +103,7 @@ Plug 'kshenoy/vim-signature'
 " Nerdtree
 Plug 'scrooloose/nerdtree'
 "[!]TODO <leader> bi - tags at the right (not often used - check if really needed)
-Plug 'majutsushi/tagbar'
+" Plug 'majutsushi/tagbar'
 
 "" T.Pope plugins - quality of life plugins
 " surrounding stuff by tags etc.
@@ -307,8 +345,8 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 " -------------------------------------------------------------------------------------------------
 " 2.5 Plugins config
 " -------------------------------------------------------------------------------------------------
-
 "" Esearch
+
 let g:esearch = {
   \ 'adapter':    'rg',
   \ 'backend':    'nvim',
@@ -320,6 +358,23 @@ let g:esearch = {
 "" Airline
 let g:airline_theme='tender'
 let g:airline#extensions#tabline#enabled = 1
+
+
+" ----------------------------------------
+"      Add custom word to airline
+" ----------------------------------------
+"""" color word for airline
+" call airline#parts#define_accent('(ノಠ益ಠ)ノ彡┻━┻', 'green')
+"""" Add colored Lightsaber word to section A of Airline
+" let g:airline_section_a = airline#section#create(['(ノಠ益ಠ)ノ彡┻━┻', ' | ', 'mode'])
+let g:airline_mode_map = {
+  \ 'n' : 'NORMAL ( ´･ω･)',
+  \ 'i' : 'INSERT (ノಠ益ಠ)ノ彡┻━┻',
+  \ 'R' : 'REPLACE SRSLY?(ﾟ┏Д┓ﾟ ;)',
+  \ 'v' : 'VISUAL ┬──┬ ノ( ゜-゜ノ)',
+  \ 'V' : 'V-LINE  ರ╭╮ರ',
+  \ }
+" ----------------------------------------
 
 let g:indentLine_color_term = 255
 
@@ -345,6 +400,53 @@ autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
 
 " "" Seeing Is Believing - good to remember
+
+"""" Startify
+
+"List of kinds of things that get to be displayed in startify
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
+      \ ]
+
+" Startify bookmarked projects
+let g:startify_bookmarks = [
+      \ "~/projects/preferredreturn",
+      \ "~/projects/yalty-backend",
+      \ "~/.config/nvim/init.vim"]
+
+" Number of files in list
+let g:startify_files_number = 4
+
+" Some Vader ascii art
+let g:ascii = [
+        \"    _________________________________",
+        \"   |:::::::::::'~||~~~``:::::::::::::|",
+        \"   |::::::::'   .':     o`:::::::::::|",
+        \"   |:::::::' oo | |o  o    ::::::::::|",
+        \"   |::::::: 8  .'.'    8 o  :::::::::|",
+        \"   |::::::: 8  | |     8    :::::::::|",
+        \"   |::::::: _._| |_,...8    :::::::::|",
+        \"   |::::::'~--.   .--. `.   `::::::::|",
+        \"   |:::::'     =8     ~    o ::::::::|",
+        \"   |::::'       8._ 88.     o::::::::|",
+        \"   |:::'   __. ,.ooo~~.      o`::::::|",
+        \"   |:::   . -. 88`78o/:        `:::::|",
+        \"   |::'     /. o o   ::       88`::::|",
+        \"   |:;     o|| 8 8 |d.        `8 `:::|",
+        \"   |:.       - ^ ^ -'           `-`::|",
+        \"   |::.                          .:::|",
+        \"   |:::::.....           ::'     ``::|",
+        \"   |::::::::-'`-        88          `|",
+        \"   |:::::-'.          -       ::     |",
+        \"   |:-~. . .                   :     |",
+        \"   | .. .   ..:   o:8      88o       |",
+        \"   |_________________________________|",
+        \]
+
+let g:startify_custom_header =
+  \ 'map(startify#fortune#boxed() + g:ascii, "\"   \".v:val")'
 
 "" Deoplete -completion tool- config
 let g:deoplete#enable_at_startup = 1

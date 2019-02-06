@@ -92,10 +92,16 @@ call plug#begin('~/.local/share/nvim/plugged')
 " -------------------------------------------------------------------------------------------------
 "" 1.1 Programming workflow related
 " -------------------------------------------------------------------------------------------------
-" Fuzzy finder (uses fzy - brew install fzy)
-Plug 'srstevenson/vim-picker'
-"Search pattern in project - using `ripgrep` (leader ff, leader fw)
-Plug 'eugen0329/vim-esearch'
+"  Replaced by fzf for now (reason: preview functionality of fzf)
+"" Fuzzy finder (uses fzy - brew install fzy)
+"Plug 'srstevenson/vim-picker'
+""Search pattern in project - using `ripgrep` (leader ff, leader fw)
+"Plug 'eugen0329/vim-esearch'
+
+" FZF - fuzzy finder
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+
 " Async Lint Engine - linting etc.
 Plug 'w0rp/ale'
 " Display marks at the left side
@@ -104,6 +110,9 @@ Plug 'kshenoy/vim-signature'
 Plug 'scrooloose/nerdtree'
 "[!]TODO <leader> bi - tags at the right (not often used - check if really needed)
 " Plug 'majutsushi/tagbar'
+
+" Easymotion - https://github.com/easymotion/vim-easymotion
+Plug 'easymotion/vim-easymotion'
 
 "" T.Pope plugins - quality of life plugins
 " surrounding stuff by tags etc.
@@ -130,6 +139,7 @@ Plug 'sheerun/vim-polyglot'
 " Elixir specific
 Plug 'slashmili/alchemist.vim'
 Plug 'elixir-lang/vim-elixir'
+Plug 'mhinz/vim-mix-format'
 Plug 'gasparch/vim-elixir-fold'
 " Haskell specific
 Plug 'neovimhaskell/haskell-vim'
@@ -260,6 +270,18 @@ set foldlevel=2
 set undolevels=1000
 set backspace=indent,eol,start
 
+" hints in command line
+set wildmenu
+
+" Same clipboard buffer for vim and system
+set clipboard=unnamed
+
+" Ignore files/folders when searching with CtrlP
+set wildignore+=*/.git/*,*/.svn/*,*/.DS_Store
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
 let g:enable_bold_font = 1
 let g:enable_italic_font = 1
 
@@ -276,8 +298,6 @@ endif
 " -------------------------------------------------------------------------------------------------
 " space as leader key
 let mapleader=" "
-" esc as jk
-imap jk <ESC>
 
 " disable highlight with double enter instead of :noh
 nnoremap <CR> :noh<CR><CR>
@@ -288,11 +308,27 @@ nmap <silent> <leader>j :wincmd j<CR>
 nmap <silent> <leader>h :wincmd h<CR>
 nmap <silent> <leader>l :wincmd l<CR>
 
+"QWERTY
+"
+" esc as jk
+imap jk <ESC>
 " switching panes with ctrl kjhl
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+" DVORAK
+" esc as jk
+" imap ht <ESC>
+" " switching panes with ctrl kjhl
+" nnoremap <C-H> <C-W><C-J>
+" nnoremap <C-T> <C-W><C-K>
+" nnoremap <C-N> <C-W><C-L>
+" nnoremap <C-D> <C-W><C-H>
+
+" set langmap=dh,hj,tk,nl
+
 
 " -------------------------------------------------------------------------------------------------
 """ 2.4.1 Buffer - keybindings
@@ -321,15 +357,20 @@ nnoremap <leader><Tab> :bn<CR>
 " -------------------------------------------------------------------------------------------------
 " VimPicker (fuzzy find in project)
 " PickerEdit - most used - rest we will see (probably can be unmaped)
-nmap <unique> <leader>pf <Plug>PickerEdit
-nmap <unique> <leader>ps <Plug>PickerSplit
-nmap <unique> <leader>pt <Plug>PickerTabedit
-nmap <unique> <leader>pv <Plug>PickerVsplit
-nmap <unique> <leader>pb <Plug>PickerBuffer
-nmap <unique> <leader>p] <Plug>PickerTag
-nmap <unique> <leader>pw <Plug>PickerStag
-nmap <unique> <leader>po <Plug>PickerBufferTag
-nmap <unique> <leader>ph <Plug>PickerHelp
+" nmap <unique> <leader>pf <Plug>PickerEdit
+" nmap <unique> <leader>ps <Plug>PickerSplit
+" nmap <unique> <leader>pt <Plug>PickerTabedit
+" nmap <unique> <leader>pv <Plug>PickerVsplit
+" nmap <unique> <leader>pb <Plug>PickerBuffer
+" nmap <unique> <leader>p] <Plug>PickerTag
+" nmap <unique> <leader>pw <Plug>PickerStag
+" nmap <unique> <leader>po <Plug>PickerBufferTag
+" nmap <unique> <leader>ph <Plug>PickerHelp
+
+" FZF
+nnoremap <leader>p :Files<CR>
+nnoremap <leader>f :Rg<CR>
+
 " Nerdtree
 map <C-n> :NERDTreeToggle<CR>
 
@@ -354,6 +395,7 @@ let g:esearch = {
   \ 'batch_size': 1000,
   \ 'use':        ['visual', 'hlsearch', 'last'],
   \}
+
 
 "" Airline
 let g:airline_theme='tender'
@@ -405,15 +447,18 @@ autocmd! User GoyoLeave Limelight!
 
 "List of kinds of things that get to be displayed in startify
 let g:startify_lists = [
-      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
       \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
       \ { 'type': 'commands',  'header': ['   Commands']       },
       \ ]
+
+let g:startify_custom_indices = ['pr', 'y', 'md', 'c']
 
 " Startify bookmarked projects
 let g:startify_bookmarks = [
       \ "~/projects/preferredreturn",
       \ "~/projects/yalty-backend",
+      \ "~/projects/merck-diabetes",
       \ "~/.config/nvim/init.vim"]
 
 " Number of files in list
@@ -429,19 +474,19 @@ let g:ascii = [
         \"   |::::::: 8  | |     8    :::::::::|",
         \"   |::::::: _._| |_,...8    :::::::::|",
         \"   |::::::'~--.   .--. `.   `::::::::|",
-        \"   |:::::'     =8     ~    o ::::::::|",
-        \"   |::::'       8._ 88.     o::::::::|",
-        \"   |:::'   __. ,.ooo~~.      o`::::::|",
-        \"   |:::   . -. 88`78o/:        `:::::|",
-        \"   |::'     /. o o   ::       88`::::|",
-        \"   |:;     o|| 8 8 |d.        `8 `:::|",
-        \"   |:.       - ^ ^ -'           `-`::|",
-        \"   |::.                          .:::|",
-        \"   |:::::.....           ::'     ``::|",
-        \"   |::::::::-'`-        88          `|",
-        \"   |:::::-'.          -       ::     |",
-        \"   |:-~. . .                   :     |",
-        \"   | .. .   ..:   o:8      88o       |",
+        \"   |:::::'     =8     ~  \\ o ::::::::|",
+        \"   |::::'       8._ 88.   \\ o::::::::|",
+        \"   |:::'   __. ,.ooo~~.    \\ o`::::::|",
+        \"   |:::   . -. 88`78o/:     \\  `:::::|",
+        \"   |::'     /. o o  \\ ::     \\88`::::|",
+        \"   |:;     o|| 8 8 |d.        `8 `:::|   'He will join us or die.'         ",
+        \"   |:.       - ^ ^ -'           `-`::|                                     ",
+        \"   |::.                          .:::|                                     ",
+        \"   |:::::.....           ::'     ``::|                                     ",
+        \"   |::::::::-'`-        88          `|                                     ",
+        \"   |:::::-'.          -       ::     |                                     ",
+        \"   |:-~. . .                   :     |                                     ",
+        \"   | .. .   ..:   o:8      88o       |        - Darth Vader on VSCode user ",
         \"   |_________________________________|",
         \]
 
@@ -453,3 +498,15 @@ let g:deoplete#enable_at_startup = 1
 
 " Vim-picker grep tool as ripgrep
 let g:picker_find_executable = 'rg'
+
+" fzf - config
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --fixed-strings --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%', '?'), <bang>0)
+
+command! -bang -nargs=? -complete=dir Files
+\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" let g:fzf_prefer_tmux = 1
